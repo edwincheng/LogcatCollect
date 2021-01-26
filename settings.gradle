@@ -1,0 +1,3 @@
+include ':logcollect'
+include ':app'
+rootProject.name = "LogcatCollect"
