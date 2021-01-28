@@ -44,7 +44,7 @@ public class FileUtil {
             long fileLength = randomFile.length();
             // 将写文件指针移到文件尾。
             randomFile.seek(fileLength);
-            randomFile.writeBytes(content + "\r\n");
+            randomFile.writeUTF(content + "\r\n");
             randomFile.close();
         } catch (IOException e) {
             e.printStackTrace();

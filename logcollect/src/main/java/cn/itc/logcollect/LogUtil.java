@@ -22,6 +22,10 @@ public class LogUtil {
     private static LogConfig logConfig;
     /** 日志时间工具 */
     private static ThreadLocal<SimpleDateFormat> threadLocal;
+    /** 全局上下文 */
+    private Application application;
+    /** 是否控制台输出，默认不输出 */
+    private boolean printInConsole;
 
     private static class LogUtilHolder {
         private static LogUtil INSTANCE = new LogUtil();
@@ -32,15 +36,19 @@ public class LogUtil {
     }
 
     /** 初始化 */
-    public void init(Application context) {
+    public void init(Application context, boolean printInConsole) {
         //初始化时间工具
         if (threadLocal == null) {
             threadLocal = new ThreadLocal<>();
         }
 
+        this.application = context;
+        this.printInConsole = printInConsole;
+
         LogConfig logConfig = readLogConfigFromFile();
         if (logConfig == null) {
-            LogUtilHolder.INSTANCE.logConfig = new LogConfig(context, TimeUtil.getCurrentTimeStamp(), 0,
+            //初始化配置项
+            LogUtilHolder.INSTANCE.logConfig = new LogConfig(TimeUtil.getCurrentTimeStamp(), 0,
                     TimeUtil.getCurrentTimeStamp(), 0);
             saveConfigMsg();
         } else {
@@ -52,13 +60,14 @@ public class LogUtil {
         saveConfigMsg();
 
         /** 初始化本地奔溃工具 */
-        CrashHandle.getInstance().init(LogUtilHolder.INSTANCE.logConfig.getApplication());
+        CrashHandle.getInstance().init(this.application);
     }
 
     /**
      * 储存配置信息
      */
     public void saveConfigMsg() {
+        Log.e("edwincheng", "saveConfigMsg: " );
         File file = new File(LogConfig.ConfigPath);
         try {
             if (!file.exists()) {
@@ -66,7 +75,7 @@ public class LogUtil {
             }
 
             Gson gson = new Gson();
-            FileUtil.overrideToFile(LogConfig.ConfigPath, gson.toJson(LogUtilHolder.INSTANCE.logConfig));
+            FileUtil.overrideToFile(LogConfig.ConfigPath, (new Gson()).toJson(LogUtilHolder.INSTANCE.logConfig));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -129,7 +138,7 @@ public class LogUtil {
         }
 
         /** 优先输出控制台 */
-        if (logConfig.isPrintInConsole()) {
+        if (this.printInConsole) {
             switch (level) {
                 case Level.DEBUG:
                     Log.d(tag, message);
@@ -163,7 +172,7 @@ public class LogUtil {
         }
 
         /** 优先输出控制台 */
-        if (logConfig.isPrintInConsole()) {
+        if (this.printInConsole) {
             Log.d(tag, message);
         }
 
@@ -179,11 +188,9 @@ public class LogUtil {
     private void writeToLocalOperationFile(String tag, String level, String message) {
         String filePath = LogConfig.optFolderPath + logConfig.getOperationFileTimeStamp() + ".txt";
 
-        String sb = getFormatTime() +  "   [" + tag + "]   " +
-            "   [" + level + "]   " +message;
-
+        String sb = getFormatTime() +  " [" + tag + "]" +
+            " [" + level + "] " + message;
         FileUtil.writeToFile(filePath, sb);
-
         selfCheckFileSize(filePath, 1);
     }
 
@@ -195,9 +202,8 @@ public class LogUtil {
      */
     private void writeToLocalNetWorkFile(String tag, String level, String message) {
         String filePath = LogConfig.networkFolderPath + logConfig.getNetworkFileTimeStamp() + ".txt";
-        String sb = getFormatTime() +  "   [" + tag + "]   " +
-                "   [" + level + "]   " +message;
-
+        String sb = getFormatTime() +  " [" + tag + "]" +
+                " [" + level + "] " + message;
         FileUtil.writeToFile(filePath, sb);
 
         selfCheckFileSize(filePath, 2);

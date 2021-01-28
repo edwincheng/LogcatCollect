@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        PowerUtil.verifyStoragePermissions(this);
 
         initView();
         initData();
@@ -35,8 +36,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvNetwork.setOnClickListener(this);
         tvCheckFileNum.setOnClickListener(this);
 
-        LogUtil.getInstance().init(getApplication());
-
+        if(PowerUtil.checkIsStoragePermissionsGranted(this,1011)){
+            LogUtil.getInstance().init(getApplication(), false);
+        }
 
     }
 
