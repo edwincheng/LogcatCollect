@@ -285,7 +285,7 @@ public class LogUtil {
         if (folderFile != null && folderFile.isDirectory()) {
             File[] fileLists = folderFile.listFiles();
 
-            if (fileLists.length == 20) {
+            if (fileLists.length == 10) {
                 Arrays.sort(fileLists, new Comparator<File>() {
                     @Override
                     public int compare(File o1, File o2) {

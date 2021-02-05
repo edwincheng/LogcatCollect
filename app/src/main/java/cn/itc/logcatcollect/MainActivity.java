@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 LogUtil.getInstance().print(getLocalClassName(), Level.DEBUG, "测试操作消息");
                 break;
             case R.id.tv_network:
-                LogUtil.getInstance().printNetWorkMsg(getLocalClassName(), Level.DEBUG, "测试网路消息");
+                LogUtil.getInstance().printNetWorkMsg(getLocalClassName(), Level.SEND, "测试网路消息");
                 break;
             case R.id.tv_check_file_num:
                 break;
