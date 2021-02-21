@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 LogUtil.getInstance().uploadToQiNiuYun(accessKey, secretKey, bucket, "云控",
                         new UploadListener() {
                             @Override
-                            public void uploadResult(boolean result) {
+                            public void uploadResult(boolean result, String msg) {
                                 if (result) {
                                     Log.i("upload", "success");
                                 } else {

@@ -189,11 +189,11 @@ public class LogUtil {
                     if (info.isOK()) {
                         Log.i(TAG, "success");
                         if (listener != null){
-                            listener.uploadResult(true);
+                            listener.uploadResult(true, info.error == null? "" :info.error);
                         }
                     } else {
-                        Log.i(TAG, "upload fail");
-                        listener.uploadResult(false);
+                        Log.i(TAG, "upload fail" + info.error);
+                        listener.uploadResult(false, info.error == null? "" :info.error);
                     }
                 }
             });
