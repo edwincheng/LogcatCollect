@@ -48,9 +48,9 @@ public class CrashHandle implements Thread.UncaughtExceptionHandler {
             try {
                 long timestamp = System.currentTimeMillis();
                 String time = dataFormat.format(new Date());
-                String fileName = "crash" + time + "-" + timestamp + ".txt";
+                String fileName = "crash" + time + ".txt";
                 if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                    FileOutputStream fos = new FileOutputStream(LogConfig.crashFolderPath + fileName);
+                    FileOutputStream fos = new FileOutputStream(LogConfig.parentPath + fileName);
                     Log.e("--异常文件创建--", FileUtil.getDiskCacheDir(context, fileName));
                     fos.write((versioninfo + mobileInfo + errorinfo).getBytes());
                     fos.close();

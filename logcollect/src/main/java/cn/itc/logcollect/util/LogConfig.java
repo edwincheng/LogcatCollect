@@ -3,12 +3,6 @@ package cn.itc.logcollect.util;
 public class LogConfig {
     /** 父文件储存路径 */
     public final static String parentPath = "/sdcard/Android/LogUtil/";
-    /** 操作记录文件夹路径 */
-    public final static String optFolderPath = parentPath + "opt/";
-    /** 网络记录文件夹路径 */
-    public final static String networkFolderPath = parentPath + "network/";
-    /** 崩溃日志采集文件夹路径 */
-    public final static String crashFolderPath = parentPath + "crash/";
     /** 配置文件路径 */
     public final static String ConfigPath = parentPath + "config.txt/";
     /** 当前定义的网络访问文件夹后缀时间戳  */

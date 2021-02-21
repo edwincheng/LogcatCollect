@@ -32,6 +32,8 @@ dependencies {
     implementation ('com.qiniu:qiniu-android-sdk:8.1.+'){
         exclude (group: 'com.squareup.okhttp3', module: 'okhttp')
     }
+
+    implementation 'com.qiniu:qiniu-java-sdk:7.4.+'
     implementation 'com.squareup.okhttp3:okhttp:4.2.2'
 
 }

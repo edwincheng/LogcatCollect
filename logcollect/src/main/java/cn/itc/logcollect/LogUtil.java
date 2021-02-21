@@ -4,6 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.util.Log;
 import com.google.gson.Gson;
+import com.qiniu.android.http.ResponseInfo;
+import com.qiniu.android.storage.UpCompletionHandler;
+import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -14,6 +17,7 @@ import cn.itc.logcollect.util.CrashHandle;
 import cn.itc.logcollect.util.FileUtil;
 import cn.itc.logcollect.util.Level;
 import cn.itc.logcollect.util.LogConfig;
+import cn.itc.logcollect.util.QiNiuUtil;
 import cn.itc.logcollect.util.TimeUtil;
 
 
@@ -103,26 +107,6 @@ public class LogUtil {
         if (!file.exists()){
             file.mkdir();
         }
-
-        file = new File(LogConfig.optFolderPath);
-        if (!file.exists()){
-            file.mkdir();
-        }
-
-        file = new File(LogConfig.networkFolderPath);
-        if (!file.exists()){
-            file.mkdir();
-        }
-
-        file = new File(LogConfig.crashFolderPath);
-        if (!file.exists()){
-            file.mkdir();
-        }
-
-        file = new File(LogConfig.optFolderPath);
-        if (!file.exists()){
-            file.mkdir();
-        }
     }
 
 
@@ -180,13 +164,52 @@ public class LogUtil {
     }
 
     /**
+     * 上传文件到七牛云平台
+     * @param accessKey
+     * @param secretKey
+     * @param bucketName 远程仓库名
+     * @param appTag 上传app的标志位
+     * @return
+     */
+    public void uploadToQiNiuYun(String accessKey, String secretKey, String bucketName, String appTag, final UploadListener listener){
+        final String zipName = appTag + "_" + TimeUtil.getCurrentFileNameTime() + ".zip";
+
+        boolean status = FileUtil.fileToZip(LogConfig.parentPath, zipName);
+
+        if (status) {
+            QiNiuUtil.uploadFile(accessKey, secretKey, bucketName, LogConfig.parentPath + zipName, zipName, new UpCompletionHandler() {
+                @Override
+                public void complete(String key, ResponseInfo info, JSONObject response) {
+                    //上传完毕后自动删除文件
+                    File file = new File(LogConfig.parentPath + zipName);
+                    if (file != null ){
+                        file.delete();
+                    }
+
+                    if (info.isOK()) {
+                        Log.i(TAG, "success");
+                        if (listener != null){
+                            listener.uploadResult(true);
+                        }
+                    } else {
+                        Log.i(TAG, "upload fail");
+                        listener.uploadResult(false);
+                    }
+                }
+            });
+        } else {
+            //TODO:打包失败
+        }
+    }
+
+    /**
      * 写入本地文件
      * @param tag 自定义标志
      * @param level 等级
      * @param message 信息
      */
     private void writeToLocalOperationFile(String tag, String level, String message) {
-        String filePath = LogConfig.optFolderPath + logConfig.getOperationFileTimeStamp() + ".txt";
+        String filePath = LogConfig.parentPath + "operation" + logConfig.getOperationFileTimeStamp() + ".txt";
 
         String sb = getFormatTime() +  " [" + tag + "]" +
             " [" + level + "] " + message;
@@ -201,7 +224,7 @@ public class LogUtil {
      * @param message 信息
      */
     private void writeToLocalNetWorkFile(String tag, String level, String message) {
-        String filePath = LogConfig.networkFolderPath + logConfig.getNetworkFileTimeStamp() + ".txt";
+        String filePath = LogConfig.parentPath + "network" + logConfig.getNetworkFileTimeStamp() + ".txt";
         String sb = getFormatTime() +  " [" + tag + "]" +
                 " [" + level + "] " + message;
         FileUtil.writeToFile(filePath, sb);
@@ -239,7 +262,7 @@ public class LogUtil {
                         logConfig.setOperationFileSize(0);
                         logConfig.setOperationFileTimeStamp(TimeUtil.getCurrentTimeStamp());
 
-                        file = new File(LogConfig.optFolderPath + logConfig.getOperationFileTimeStamp());
+                        file = new File(LogConfig.parentPath + "operation" + logConfig.getOperationFileTimeStamp());
                         if (!file.exists()) {
                             file.createNewFile();
                         }
@@ -258,7 +281,7 @@ public class LogUtil {
                         logConfig.setNetworkFileSize(0);
                         logConfig.setNetworkFileTimeStamp(TimeUtil.getCurrentTimeStamp());
 
-                        file = new File(LogConfig.networkFolderPath + logConfig.getNetworkFileTimeStamp());
+                        file = new File(LogConfig.parentPath + "network" +  logConfig.getNetworkFileTimeStamp());
                         if (!file.exists()) {
                             file.createNewFile();
                         }
