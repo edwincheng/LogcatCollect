@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cn.itc.logcatcollection.MainActivity">
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
 
     <TextView
         android:id="@+id/tv_operation"
@@ -13,10 +14,7 @@
         android:text="生成操作日记"
         android:padding="10dp"
         android:background="@android:color/darker_gray"
-        android:textColor="@android:color/white"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textColor="@android:color/white" />
 
     <TextView
         android:id="@+id/tv_network"
@@ -26,9 +24,6 @@
         android:padding="10dp"
         android:background="@android:color/darker_gray"
         android:textColor="@android:color/white"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_operation"
         android:layout_marginTop="20dp"/>
 
     <TextView
@@ -39,9 +34,6 @@
         android:padding="10dp"
         android:background="@android:color/darker_gray"
         android:textColor="@android:color/white"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_network"
         android:layout_marginTop="20dp"/>
 
     <TextView
@@ -52,9 +44,6 @@
         android:padding="10dp"
         android:background="@android:color/darker_gray"
         android:textColor="@android:color/white"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_check_file_num"
         android:layout_marginTop="20dp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

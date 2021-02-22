@@ -3,7 +3,7 @@ package cn.itc.logcatcollect;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
-import androidx.core.app.ActivityCompat;
+import android.support.v4.app.ActivityCompat;
 
 /**
  * 文件权限检测

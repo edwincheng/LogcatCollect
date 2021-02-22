@@ -1,10 +1,10 @@
 package cn.itc.logcatcollect;
 
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
 import cn.itc.logcollect.LogUtil;
 import cn.itc.logcollect.UploadListener;
 import cn.itc.logcollect.util.Level;
